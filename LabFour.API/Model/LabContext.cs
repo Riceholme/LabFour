@@ -21,16 +21,16 @@ namespace LabFour.API.Model
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PersonInterest>()
-                .HasKey(pi => new { pi.PersonId, pi.InterestId });
-            modelBuilder.Entity<PersonInterest>()
-                .HasOne(pi => pi.Person)
-                .WithMany(pi => pi.Interests)
-                .HasForeignKey(pi => pi.PersonId);
-            modelBuilder.Entity<PersonInterest>()
-                .HasOne(pi => pi.Interest)
-                .WithMany(pi => pi.Persons)
-                .HasForeignKey(pi => pi.InterestId);
+            //modelBuilder.Entity<PersonInterest>()
+            //    .HasKey(pi => new { pi.PersonId, pi.InterestId });
+            //modelBuilder.Entity<PersonInterest>()
+            //    .HasOne(pi => pi.Person)
+            //    .WithMany(pi => pi.Interests)
+            //    .HasForeignKey(pi => pi.PersonId);
+            //modelBuilder.Entity<PersonInterest>()
+            //    .HasOne(pi => pi.Interest)
+            //    .WithMany(pi => pi.Persons)
+            //    .HasForeignKey(pi => pi.InterestId);
 
             base.OnModelCreating(modelBuilder);
 
@@ -68,28 +68,66 @@ namespace LabFour.API.Model
                 {
                     InterestId = 1,
                     Title = "Defense Of The Ancients 2",
-                    Description = "Multiplayer online battle arena"
+                    Description = "Multiplayer online battle arena",
+                    PersonId = 1
+
                 });
             modelBuilder.Entity<Interest>().
                 HasData(new Interest
                 {
                     InterestId = 2,
                     Title = "God of War",
-                    Description = "Action Ad"
+                    Description = "Action Adventure",
+                    PersonId = 2
+
                 });
             modelBuilder.Entity<Interest>().
                 HasData(new Interest
                 {
                     InterestId = 3,
                     Title = "Elden Ring",
-                    Description = "Open-World Action RPG"
+                    Description = "Open-World Action RPG",
+                    PersonId = 3
                 });
             modelBuilder.Entity<Interest>().
                 HasData(new Interest
                 {
                     InterestId = 4,
                     Title = "League of Legends",
-                    Description = "Multiplayer online battle arena"
+                    Description = "Multiplayer online battle arena",
+                    PersonId = 4
+                });
+            modelBuilder.Entity<WebSite>().
+                HasData(new WebSite
+                {
+                    WebSiteId = 1,
+                    Link = "https://www.dota2.com/home",
+                    Description = "Dota 2 Website",
+                    InterestId = 1
+                });
+            modelBuilder.Entity<WebSite>().
+                HasData(new WebSite
+                {
+                    WebSiteId = 2,
+                    Link = "https://en.wikipedia.org/wiki/God_of_War_(2018_video_game)",
+                    Description = "Wikipedia link",
+                    InterestId = 2
+                });
+            modelBuilder.Entity<WebSite>().
+                HasData(new WebSite
+                {
+                    WebSiteId = 3,
+                    Link = "https://en.wikipedia.org/wiki/Elden_Ring",
+                    Description = "Wikipedia link",
+                    InterestId = 3
+                });
+            modelBuilder.Entity<WebSite>().
+                HasData(new WebSite
+                {
+                    WebSiteId = 4,
+                    Link = "https://www.leagueoflegends.com/en-gb/",
+                    Description = "League of Legends Website",
+                    InterestId = 4
                 });
 
 

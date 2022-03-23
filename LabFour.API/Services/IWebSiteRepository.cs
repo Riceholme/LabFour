@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace LabFour.API.Services
 {
-    public interface IWebSiteRepository
+    public interface IWebSiteRepository<T>
     {
-        IEnumerable<WebSite> GetWebSites();
-
-        WebSite GetWebSite(int id);
-        WebSite AddWebSite(WebSite newWebSite);
-        void DeleteWebSite(WebSite webSite);
-        WebSite Update(WebSite webSite);
+        Task<IEnumerable<T>> GetAll();
+        //Uppgift 5
+        Task<T> AddNewWebsiteWithIdRelations(T newEntity);
+        Task<T> GetSingle(int id);
+        Task<T> Add(T newEntity);
+        Task<T> Update(T Entity);
+        Task<T> Delete(int id);
     }
 }

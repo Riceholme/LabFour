@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace LabFour.API.Services
 {
-    public interface IPersonRepository
+    public interface IPersonRepository<T>
     {
-        IEnumerable<Person> GetPersons();
-        Person GetPerson(int id);
-        Person AddPerson(Person newPerson);
-        void DeletePerson(Person person);
-        Person Update(Person person);
-        IEnumerable<Person> GetPersonInterests();
-
+        //Uppgift 1
+        Task<IEnumerable<T>> GetAll();
+        //Upgift 2
+        Task<IEnumerable<T>> GetAllPersonsInterests(int id);
+        Task<T> GetSingle(int id);
+        Task<T> Add(T newEntity);
+        Task<T> Update(T Entity);
+        Task<T> Delete(int id);
     }
 }

@@ -6,12 +6,16 @@ using System.Threading.Tasks;
 
 namespace LabFour.API.Services
 {
-    public interface IInterestRepository
+    public interface IInterestRepository<T>
     {
-        IEnumerable<Interest> GetInterests();
-        Interest GetInterest(int id);
-        Interest AddInterest(Interest newInterest);
-        void DeleteInterest(Interest interest);
-        Interest Update(Interest interest);
+        Task<IEnumerable<T>> GetAll();
+        //Upgift 3
+        Task<IEnumerable<T>> GetAllLinksByPersonId(int id);
+        //Uppift 4
+        Task<T> AddNewInterestWithPerson(T newEntity);
+        Task<T> GetSingle(int id);
+        Task<T> Add(T newEntity);
+        Task<T> Update(T Entity);
+        Task<T> Delete(int id);
     }
 }
