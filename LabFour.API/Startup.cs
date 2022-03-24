@@ -1,4 +1,6 @@
 using LabFour.API.Model;
+using LabFour.API.Services;
+using LabFour.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,9 +29,16 @@ namespace LabFour.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling
+            = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             services.AddControllers();
             services.AddDbContext<LabContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("Connection")));
+
+            services.AddScoped<IPersonRepository<Person>, PersonRepository>();
+            services.AddScoped<IInterestRepository<Interest>, InterestRepository>();
+            services.AddScoped<IWebSiteRepository<WebSite>, WebSiteRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

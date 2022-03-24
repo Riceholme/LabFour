@@ -16,9 +16,11 @@ namespace LabFour.API.Services
             _personContext = personContext;
         }
 
-        public Task<Person> Add(Person newPerson)
+        public async Task<Person> Add(Person newPerson)
         {
-            throw new NotImplementedException();
+            var result = await _personContext.Persons.AddAsync(newPerson);
+            await _personContext.SaveChangesAsync();
+            return result.Entity;
         }
 
         public Task<Person> Delete(int id)
@@ -26,24 +28,32 @@ namespace LabFour.API.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Person>> GetAll()
+        public async Task<IEnumerable<Person>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _personContext.Persons.ToListAsync();
         }
 
-        public Task<IEnumerable<Person>> GetAllPersonsInterests(int id)
+        public Task<IEnumerable<Person>> GetPersonsInterests(int id, Person person)
         {
             throw new NotImplementedException();
+            //return await _personContext.Persons.Include(i => i.Interests).Where(i => i.Interests == i.PersonId).ToListAsync();
         }
 
-        public Task<Person> GetSingle(int id)
+        public async Task<Person> GetSingle(int id)
         {
-            throw new NotImplementedException();
+            return await _personContext.Persons.FirstOrDefaultAsync(p => p.PersonId == id);
         }
 
-        public Task<Person> Update(Person person)
+        public async Task<Person> Update(Person person)
         {
-            throw new NotImplementedException();
+            var result = await _personContext.Persons.FirstOrDefaultAsync(p => p.PersonId == person.PersonId);
+            if (result != null)
+            {
+                result.Name = person.Name;
+                result.PhoneNumber = person.PhoneNumber;
+                return result;
+            }
+            return null;
         }
     }
 }

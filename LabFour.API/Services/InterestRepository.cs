@@ -1,5 +1,6 @@
 ﻿using LabFour.API.Model;
 using LabFour.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,11 @@ namespace LabFour.API.Services
             _interestContext = interestContext;
         }
 
-        public Task<Interest> Add(Interest newInterest)
+        public async Task<Interest> Add(Interest newInterest)
         {
-            throw new NotImplementedException();
+            var result = await _interestContext.Interests.AddAsync(newInterest);
+            await _interestContext.SaveChangesAsync();
+            return result.Entity;
         }
 
         public Task<Interest> AddNewInterestWithPerson(Interest newInterest)
@@ -30,9 +33,15 @@ namespace LabFour.API.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Interest>> GetAll()
+        public async Task<IEnumerable<Interest>> GetAll()
         {
-            throw new NotImplementedException();
+            //return await _interestContext.Interests.ToListAsync();
+            return await _interestContext.Interests.Include(i => i.Person).ToListAsync();
+        }
+        //GET ALL INTERESTS WITH AN ID OF PERSON.
+        public async Task<IEnumerable<Interest>> GetInterestsByPersonId(int id)
+        {
+            return await _interestContext.Interests.Include(i => i.Person).Where(i => i.PersonId == id && i.PersonId == i.Person.PersonId).ToListAsync();
         }
 
         public Task<IEnumerable<Interest>> GetAllLinksByPersonId(int id)
@@ -40,14 +49,24 @@ namespace LabFour.API.Services
             throw new NotImplementedException();
         }
 
-        public Task<Interest> GetSingle(int id)
+        public async Task<Interest> GetSingle(int id)
         {
-            throw new NotImplementedException();
+            return await _interestContext.Interests.Include(i => i.Person).FirstOrDefaultAsync(p => p.PersonId == id);
         }
 
-        public Task<Interest> Update(Interest interest)
+        public async Task<Interest> Update(Interest interest)
         {
-            throw new NotImplementedException();
+            var result = await _interestContext.Interests.FirstOrDefaultAsync(p => p.InterestId == interest.InterestId);
+            if (result != null)
+            {
+                result.Title = interest.Title;
+                result.Description = interest.Description;
+                //result.PersonId = interest.PersonId;
+                result.Person.Name = interest.Person.Name;
+                result.Person.PhoneNumber = interest.Person.PhoneNumber;
+                return result;
+            }
+            return null;
         }
     }
 }

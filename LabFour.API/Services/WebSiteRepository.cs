@@ -1,5 +1,6 @@
 ﻿using LabFour.API.Model;
 using LabFour.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,14 +31,14 @@ namespace LabFour.API.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<WebSite>> GetAll()
+        public async Task<IEnumerable<WebSite>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _websiteContext.WebSites.Include(w => w.Interest).ToListAsync();
         }
 
-        public Task<WebSite> GetSingle(int id)
+        public async Task<WebSite> GetSingle(int id)
         {
-            throw new NotImplementedException();
+            return await _websiteContext.WebSites.Include(w => w.Interest).FirstOrDefaultAsync(w => w.WebSiteId == id);
         }
 
         public Task<WebSite> Update(WebSite Entity)

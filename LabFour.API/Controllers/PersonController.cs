@@ -14,14 +14,32 @@ namespace LabFour.API.Controllers
     public class PersonController : ControllerBase
     {
         private IPersonRepository<Person> _personRepository;
-
         public PersonController(IPersonRepository<Person> personRepository)
         {
             _personRepository = personRepository;
         }
+
+        [HttpGet]
         public async Task<IActionResult> GetAllPersons()
         {
             return Ok(await _personRepository.GetAll());
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Person>> GetInterestOfPerson(int id)
+        {
+            try
+            {
+                if (id != null)
+                {
+                    return BadRequest("Id was not found");
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }
