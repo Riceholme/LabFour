@@ -12,6 +12,7 @@ namespace LabFour.API.Services
         Task<IEnumerable<T>> GetAll();
         //Upgift 2
         Task<IEnumerable<T>> GetPersonsInterests(int id, T entity);
+        Task<IEnumerable<T>> GetPersonsLinks(int id);
         Task<T> GetSingle(int id);
         Task<T> Add(T newEntity);
         Task<T> Update(T Entity);

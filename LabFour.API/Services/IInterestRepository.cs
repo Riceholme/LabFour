@@ -9,7 +9,7 @@ namespace LabFour.API.Services
     public interface IInterestRepository<T>
     {
         Task<IEnumerable<T>> GetAll();
-        //Upgift 3
+        //Uppgift 3 om inte IWebSiteRepositorys variant funkar
         Task<IEnumerable<T>> GetAllLinksByPersonId(int id);
         Task<IEnumerable<T>> GetInterestsByPersonId(int id);
         //Uppift 4

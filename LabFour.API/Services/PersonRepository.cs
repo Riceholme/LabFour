@@ -55,5 +55,18 @@ namespace LabFour.API.Services
             }
             return null;
         }
+
+        public async Task<IEnumerable<Person>> GetPersonsLinks(int id)
+        {
+            var links = await _personContext.Persons
+                .Include(person => person.Interests)
+                .ThenInclude(interest => interest.WebSites)
+                .Where(p => p.PersonId == id).ToListAsync();
+            return links;
+            //returnawait _personContext.Persons
+            //    .Include(p => p.Interests)
+            //    .ThenInclude(p => p.PersonId)
+            //    .Include(i => i.)
+        }
     }
 }

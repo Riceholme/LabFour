@@ -15,7 +15,7 @@ namespace LabFour.API.Services
         {
             _websiteContext = websiteContext;
         }
-       
+
         public Task<WebSite> Add(WebSite newEntity)
         {
             throw new NotImplementedException();
@@ -34,6 +34,12 @@ namespace LabFour.API.Services
         public async Task<IEnumerable<WebSite>> GetAll()
         {
             return await _websiteContext.WebSites.Include(w => w.Interest).ToListAsync();
+        }
+
+        public async Task<IEnumerable<WebSite>> GetAllPersonsLinksBynId(int id)
+        {
+            return await _websiteContext.WebSites.Include(w => w.Interest).ThenInclude(w => w.PersonId).Include(x => x.InterestId == x.WebSiteId).ToListAsync();
+            //return await _websiteContext.WebSites.Include(w => w.Interest).ThenInclude(x => x.Person).Where(w => w.InterestId == w.WebSiteId)
         }
 
         public async Task<WebSite> GetSingle(int id)

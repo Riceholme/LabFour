@@ -25,7 +25,7 @@ namespace LabFour.API.Controllers
             return Ok(await _personRepository.GetAll());
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Person>> GetInterestOfPerson(int id)
+        public async Task<ActionResult<Person>> GetInterestOfPerson(int id, Person person)
         {
             try
             {
