@@ -24,21 +24,39 @@ namespace LabFour.API.Controllers
         {
             return Ok(await _personRepository.GetAll());
         }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Person>> GetInterestOfPerson(int id, Person person)
         {
             try
             {
-                if (id != null)
+                var result = await _personRepository.GetPersonsInterests(id, person);
+                if (result != null)
                 {
-                    return BadRequest("Id was not found");
+                    return Ok(result);
                 }
-
+                return NotFound($"No interests were found of that person");
             }
             catch (Exception)
             {
-
-                throw;
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error to get persons interests");
+            }
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Person>> GetPersonsLinks(int id)
+        {
+            try
+            {
+                var result = await _personRepository.GetPersonsLinks(id);
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                return NotFound($"No links were found, ID was not found");
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error to get persons links");
             }
         }
     }

@@ -36,7 +36,8 @@ namespace LabFour.API.Services
         public async Task<IEnumerable<Interest>> GetAll()
         {
             //return await _interestContext.Interests.ToListAsync();
-            return await _interestContext.Interests.Include(i => i.Person).ToListAsync();
+            //return await _interestContext.Interests.Include(i => i.Person).ToListAsync();
+            return await _interestContext.Interests.ToListAsync();
         }
         //GET ALL INTERESTS WITH AN ID OF PERSON.
         public async Task<IEnumerable<Interest>> GetInterestsByPersonId(int id)

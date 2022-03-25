@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace LabFour.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class InterestController : ControllerBase
     {
         private IInterestRepository<Interest> _interestRepo;
@@ -16,6 +18,12 @@ namespace LabFour.API.Controllers
         public InterestController(IInterestRepository<Interest> interestRepo)
         {
             _interestRepo = interestRepo;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllInterests()
+        {
+            return Ok(await _interestRepo.GetAll());
         }
 
         [HttpGet("{id}")]
