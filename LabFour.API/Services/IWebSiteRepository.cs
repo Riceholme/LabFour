@@ -10,7 +10,7 @@ namespace LabFour.API.Services
     {
         Task<IEnumerable<T>> GetAll();
         //Uppgift 5
-        Task<T> AddNewWebsiteWithIdRelations(T newEntity);
+        Task<T> AddWebsiteForPerson(T newEntity);
         //Uppgift 3
         Task<IEnumerable<T>> GetAllPersonsLinksBynId(int id);
         Task<T> GetSingle(int id);

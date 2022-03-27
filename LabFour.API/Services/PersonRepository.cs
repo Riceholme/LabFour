@@ -18,35 +18,52 @@ namespace LabFour.API.Services
 
         public async Task<Person> Add(Person newPerson)
         {
-            var result = await _personContext.Persons.AddAsync(newPerson);
-            await _personContext.SaveChangesAsync();
+            var result = await _personContext.Persons
+                .AddAsync(newPerson);
+            await _personContext
+                .SaveChangesAsync();
             return result.Entity;
         }
 
-        public Task<Person> Delete(int id)
+        public async Task<Person> Delete(int id)
         {
-            throw new NotImplementedException();
+            var result = await _personContext.Persons
+                .FirstOrDefaultAsync(p => p.PersonId == id);
+            if (result != null)
+            {
+                _personContext.Persons
+                    .Remove(result);
+                await _personContext
+                    .SaveChangesAsync();
+                return result;
+            }
+            return null;
         }
 
         public async Task<IEnumerable<Person>> GetAll()
         {
-            return await _personContext.Persons.ToListAsync();
+            return await _personContext.Persons
+                .ToListAsync();
         }
 
-        public Task<IEnumerable<Person>> GetPersonsInterests(int id, Person person)
+        public async Task<IEnumerable<Person>> GetPersonsInterests(int id)
         {
-            throw new NotImplementedException();
-            //return await _personContext.Persons.Include(i => i.Interests).Where(i => i.Interests == i.PersonId).ToListAsync();
+            return await _personContext.Persons
+                .Include(p => p.Interests)
+                .Where(p => p.PersonId == id)
+                .ToListAsync();
         }
 
         public async Task<Person> GetSingle(int id)
         {
-            return await _personContext.Persons.FirstOrDefaultAsync(p => p.PersonId == id);
+            return await _personContext.Persons
+                .FirstOrDefaultAsync(p => p.PersonId == id);
         }
 
         public async Task<Person> Update(Person person)
         {
-            var result = await _personContext.Persons.FirstOrDefaultAsync(p => p.PersonId == person.PersonId);
+            var result = await _personContext.Persons
+                .FirstOrDefaultAsync(p => p.PersonId == person.PersonId);
             if (result != null)
             {
                 result.Name = person.Name;
@@ -61,12 +78,21 @@ namespace LabFour.API.Services
             var links = await _personContext.Persons
                 .Include(person => person.Interests)
                 .ThenInclude(interest => interest.WebSites)
-                .Where(p => p.PersonId == id).ToListAsync();
+                .Where(p => p.PersonId == id)
+                .ToListAsync();
             return links;
-            //returnawait _personContext.Persons
-            //    .Include(p => p.Interests)
-            //    .ThenInclude(p => p.PersonId)
-            //    .Include(i => i.)
         }
+        //public async Task<IEnumerable<string>> GetPersonsLinks2(int id)
+        //{
+
+        //    var links = await _personContext.Persons
+        //        .Where(p => p.PersonId == id)
+        //        .FirstOrDefault()
+        //        .Interests.Select(x => x.Title);
+        //        //.Include(person => person.Interests)
+        //        //.ThenInclude(interest => interest.WebSites)
+
+        //    return links;
+        //}
     }
 }

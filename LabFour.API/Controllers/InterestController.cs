@@ -26,12 +26,13 @@ namespace LabFour.API.Controllers
             return Ok(await _interestRepo.GetAll());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("{id}/personinterest")]
         public async Task<ActionResult<Interest>> GetInterestOfPerson(int id)
         {
             try
             {
-                var result =  await _interestRepo.GetInterestsByPersonId(id);
+                var result = await _interestRepo.GetInterestsByPersonId(id);
                 if (result != null)
                 {
                     return Ok(result);
@@ -44,7 +45,24 @@ namespace LabFour.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error to get persons interests");
             }
         }
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Interest>> GetInterest(int id)
+        {
+            try
+            {
+                var result = await _interestRepo.GetSingle(id);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, " Error to get Data from Database....");
+            }
 
+        }
         [HttpPost]
         public async Task<ActionResult<Interest>> AddNewInterest(Interest newInterest)
         {
@@ -55,7 +73,7 @@ namespace LabFour.API.Controllers
                     return BadRequest("Interest was not added");
                 }
                 var createdInterest = await _interestRepo.Add(newInterest);
-                return CreatedAtAction(nameof(GetType), new { id = createdInterest.InterestId }, createdInterest);
+                return CreatedAtAction(nameof(GetInterest), new { id = createdInterest.InterestId }, createdInterest);
             }
             catch (Exception)
             {

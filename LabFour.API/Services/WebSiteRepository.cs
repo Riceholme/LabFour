@@ -16,19 +16,35 @@ namespace LabFour.API.Services
             _websiteContext = websiteContext;
         }
 
-        public Task<WebSite> Add(WebSite newEntity)
+        public async Task<WebSite> Add(WebSite newWebSite)
         {
-            throw new NotImplementedException();
+            var result = await _websiteContext.WebSites.AddAsync(newWebSite);
+            await _websiteContext.SaveChangesAsync();
+            return result.Entity;
         }
 
-        public Task<WebSite> AddNewWebsiteWithIdRelations(WebSite newEntity)
+        public async Task<WebSite> AddWebsiteForPerson(WebSite newWebSite)
         {
-            throw new NotImplementedException();
+            var result = await _websiteContext.WebSites
+                .AddAsync(newWebSite);
+            await _websiteContext
+                .SaveChangesAsync();
+            return result.Entity;
+            //Add Foreign Key "PersonId" with reference "Person Person"
         }
 
-        public Task<WebSite> Delete(int id)
+        public async Task<WebSite> Delete(int id)
         {
-            throw new NotImplementedException();
+            var result = await _websiteContext.WebSites.FirstOrDefaultAsync(p => p.WebSiteId == id);
+            if (result != null)
+            {
+                _websiteContext.WebSites
+                    .Remove(result);
+                await _websiteContext
+                    .SaveChangesAsync();
+                return result;
+            }
+            return null;
         }
 
         public async Task<IEnumerable<WebSite>> GetAll()
@@ -38,18 +54,35 @@ namespace LabFour.API.Services
 
         public async Task<IEnumerable<WebSite>> GetAllPersonsLinksBynId(int id)
         {
-            return await _websiteContext.WebSites.Include(w => w.Interest).ThenInclude(w => w.PersonId).Include(x => x.InterestId == x.WebSiteId).ToListAsync();
+            return await _websiteContext.WebSites
+                .Include(w => w.Interest)
+                .ThenInclude(w => w.PersonId)
+                .Include(x => x.InterestId == x.WebSiteId)
+                .ToListAsync();
             //return await _websiteContext.WebSites.Include(w => w.Interest).ThenInclude(x => x.Person).Where(w => w.InterestId == w.WebSiteId)
         }
 
+        //public async Task<WebSite> GetSingle(int id)
+        //{
+        //    return await _websiteContext.WebSites.Include(w => w.Interest).FirstOrDefaultAsync(w => w.WebSiteId == id);
+        //}
         public async Task<WebSite> GetSingle(int id)
         {
             return await _websiteContext.WebSites.Include(w => w.Interest).FirstOrDefaultAsync(w => w.WebSiteId == id);
         }
 
-        public Task<WebSite> Update(WebSite Entity)
+        public async Task<WebSite> Update(WebSite webSite)
         {
-            throw new NotImplementedException();
+            var result = await _websiteContext.WebSites.FirstOrDefaultAsync(p => p.WebSiteId == webSite.WebSiteId);
+            if (result != null)
+            {
+                result.Link = webSite.Link;
+                result.Description = webSite.Description;
+                result.InterestId = webSite.InterestId;
+
+                return result;
+            }
+            return null;
         }
     }
 }

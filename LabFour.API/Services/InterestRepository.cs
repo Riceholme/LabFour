@@ -28,36 +28,45 @@ namespace LabFour.API.Services
             throw new NotImplementedException();
         }
 
-        public Task<Interest> Delete(int id)
+        public async Task<Interest> Delete(int id)
         {
-            throw new NotImplementedException();
+            var result = await _interestContext.Interests.FirstOrDefaultAsync(p => p.PersonId == id);
+            if (result != null)
+            {
+                _interestContext.Interests.Remove(result);
+                await _interestContext.SaveChangesAsync();
+                return result;
+            }
+            return null;
         }
 
         public async Task<IEnumerable<Interest>> GetAll()
         {
-            //return await _interestContext.Interests.ToListAsync();
-            //return await _interestContext.Interests.Include(i => i.Person).ToListAsync();
-            return await _interestContext.Interests.ToListAsync();
+            return await _interestContext.Interests.Include(i => i.Person).ToListAsync();
         }
         //GET ALL INTERESTS WITH AN ID OF PERSON.
         public async Task<IEnumerable<Interest>> GetInterestsByPersonId(int id)
         {
-            return await _interestContext.Interests.Include(i => i.Person).Where(i => i.PersonId == id && i.PersonId == i.Person.PersonId).ToListAsync();
+            return await _interestContext.Interests
+                .Include(i => i.Person)
+                .Where(i => i.PersonId == id && i.PersonId == i.Person.PersonId).ToListAsync();
         }
 
         public Task<IEnumerable<Interest>> GetAllLinksByPersonId(int id)
         {
             throw new NotImplementedException();
+            //Method for this exists in WebSite's repos and controller
         }
 
         public async Task<Interest> GetSingle(int id)
         {
-            return await _interestContext.Interests.Include(i => i.Person).FirstOrDefaultAsync(p => p.PersonId == id);
+            return await _interestContext.Interests.Include(i => i.Person).FirstOrDefaultAsync(p => p.InterestId == id);
         }
 
         public async Task<Interest> Update(Interest interest)
         {
-            var result = await _interestContext.Interests.FirstOrDefaultAsync(p => p.InterestId == interest.InterestId);
+            var result = await _interestContext.Interests
+                .FirstOrDefaultAsync(p => p.InterestId == interest.InterestId);
             if (result != null)
             {
                 result.Title = interest.Title;

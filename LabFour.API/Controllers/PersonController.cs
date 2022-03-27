@@ -25,12 +25,13 @@ namespace LabFour.API.Controllers
             return Ok(await _personRepository.GetAll());
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Person>> GetInterestOfPerson(int id, Person person)
+        [HttpGet/*("{id}")*/]
+        [Route("{id}/interests")]
+        public async Task<ActionResult<Person>> GetInterestOfPerson(int id)
         {
             try
             {
-                var result = await _personRepository.GetPersonsInterests(id, person);
+                var result = await _personRepository.GetPersonsInterests(id);
                 if (result != null)
                 {
                     return Ok(result);
@@ -42,7 +43,8 @@ namespace LabFour.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error to get persons interests");
             }
         }
-        [HttpGet("{id}")]
+        [HttpGet/*("{id}")*/]
+        [Route("{id}/links")]
         public async Task<ActionResult<Person>> GetPersonsLinks(int id)
         {
             try
